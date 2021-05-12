@@ -119,7 +119,7 @@ public class SAXParserMovie extends DefaultHandler {
             dirId =tempVal;
         }
         else if (qName.equalsIgnoreCase("fid")) {
-            System.out.println(tempVal);
+//            System.out.println(tempVal);
             tempMovie.setF(tempVal);
         }
         else if (qName.equalsIgnoreCase("year")) {
@@ -153,7 +153,7 @@ public class SAXParserMovie extends DefaultHandler {
 
     private void insertMovie() throws Exception {
         hashMovieCreate();
-        System.out.println(myMovie.size());
+//        System.out.println(myMovie.size());
 
         String loginUser = "mytestuser";
         String loginPasswd = "My6$Password";
@@ -445,7 +445,7 @@ public class SAXParserMovie extends DefaultHandler {
 
 
     public static void main(String[] args) throws Exception {
-        PrintStream o = new PrintStream(new File("A.txt"));
+        PrintStream o = new PrintStream(new File("B.txt"));
         PrintStream console = System.out;
         System.setOut(o);
         SAXParserMovie spa = new SAXParserMovie();
