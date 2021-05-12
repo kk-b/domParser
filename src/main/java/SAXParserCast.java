@@ -1,4 +1,6 @@
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -81,12 +83,12 @@ public class SAXParserCast extends DefaultHandler {
      */
     private void printData() {
 
-        System.out.println("No of Actors '" + myDirector.size() + "'.");
-
-        Iterator<Director> it = myDirector.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
+//        System.out.println("No of Actors '" + myDirector.size() + "'.");
+//
+//        Iterator<Director> it = myDirector.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
     }
 
     //Event Handlers
@@ -214,7 +216,7 @@ public class SAXParserCast extends DefaultHandler {
                 for (Movie movie : director.getMoviesMap()) {
                     String movie_key = movie.getTitle()+","+movie.getDirName();
                     movie_key = movie_key.toLowerCase();
-                    System.out.println(movie_key);
+//                    System.out.println(movie_key);
 //                    System.out.println(mysqlMovieData2);
                     if (mysqlMovieData2.containsKey(movie_key)){
                         String[] actors = movie.getActor().split(";");
@@ -234,12 +236,10 @@ public class SAXParserCast extends DefaultHandler {
                     }
 
                 }
-                System.out.println();
             }
             actorInsertPS.executeBatch();
             connection.commit();
         } catch (Exception e){
-            System.out.println(e);
         }
         try{
             if (actorInsertPS!=null) actorInsertPS.close();
@@ -286,7 +286,6 @@ public class SAXParserCast extends DefaultHandler {
 
         }
         catch(Exception e){
-            System.out.println(e);
 
         }
 
@@ -296,6 +295,9 @@ public class SAXParserCast extends DefaultHandler {
 
 
     public static void main(String[] args) throws Exception {
+        PrintStream o = new PrintStream(new File("C.txt"));
+        PrintStream console = System.out;
+        System.setOut(o);
         SAXParserCast spa = new SAXParserCast();
         spa.runExample();
         spa.insertActorsInMovies();

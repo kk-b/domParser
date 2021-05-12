@@ -1,6 +1,8 @@
 
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -68,12 +70,12 @@ public class SAXParserActor extends DefaultHandler {
      */
     private void printData() {
 
-        System.out.println("No of Employees '" + myActor.size() + "'.");
-
-        Iterator<Actor> it = myActor.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
+//        System.out.println("No of Employees '" + myActor.size() + "'.");
+//
+//        Iterator<Actor> it = myActor.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
     }
 
     //Event Handlers
@@ -186,11 +188,11 @@ public class SAXParserActor extends DefaultHandler {
 
                 star_statement.close();
                 rs_star.close();
-                System.out.println("\t" + actor.toString());
+//                System.out.println("\t" + actor.toString());
             }
         }
         catch (Exception e){
-            System.out.println(e);
+//            System.out.println(e);
         }
         connection.close();
     }
@@ -233,6 +235,9 @@ public class SAXParserActor extends DefaultHandler {
     }
 
     public static void main(String[] args) throws Exception {
+        PrintStream o = new PrintStream(new File("A.txt"));
+        PrintStream console = System.out;
+        System.setOut(o);
         SAXParserActor spa = new SAXParserActor();
         spa.runExample();
         spa.printData();

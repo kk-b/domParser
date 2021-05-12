@@ -1,5 +1,7 @@
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,12 +72,12 @@ public class SAXParserMovie extends DefaultHandler {
      */
     private void printData() {
 
-        System.out.println("No of Employees '" + myMovie.size() + "'.");
-
-        Iterator<Movie> it = myMovie.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
+//        System.out.println("No of Employees '" + myMovie.size() + "'.");
+//
+//        Iterator<Movie> it = myMovie.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
     }
 
     //Event Handlers
@@ -113,7 +115,6 @@ public class SAXParserMovie extends DefaultHandler {
             dirId =tempVal;
         }
         else if (qName.equalsIgnoreCase("fid")) {
-            System.out.println(tempVal);
             tempMovie.setF(tempVal);
         }
         else if (qName.equalsIgnoreCase("year")) {
@@ -147,7 +148,6 @@ public class SAXParserMovie extends DefaultHandler {
 
     private void insertMovie() throws Exception {
         hashMovieCreate();
-        System.out.println(myMovie.size());
 
         String loginUser = "mytestuser";
         String loginPasswd = "My6$Password";
@@ -183,9 +183,6 @@ public class SAXParserMovie extends DefaultHandler {
                     System.out.println("inconsistency: movie year field (<year>) cannot be empty: "+movie.getYear());
                 }
                 else{
-                    System.out.println(movie.getTitle());
-                    System.out.println(movie.getYear());
-                    System.out.println(movie.getDirName());
 
                     movieInsertPS.setString(1,movie.getTitle());
                     movieInsertPS.setString(2,String.valueOf(movie.getYear()));
@@ -272,6 +269,9 @@ public class SAXParserMovie extends DefaultHandler {
 
 
     public static void main(String[] args) throws Exception {
+        PrintStream o = new PrintStream(new File("B.txt"));
+        PrintStream console = System.out;
+        System.setOut(o);
         SAXParserMovie spa = new SAXParserMovie();
         spa.runExample();
         spa.insertMovie();
