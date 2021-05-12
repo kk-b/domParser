@@ -205,7 +205,7 @@ public class SAXParserMovie extends DefaultHandler {
             if(movieInsertPS!=null) movieInsertPS.close();
             if(connection!=null) connection.close();
         } catch(Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 //        try{
 //            if (movieInsertPS!=null) movieInsertPS.close();
