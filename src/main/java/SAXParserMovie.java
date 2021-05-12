@@ -258,7 +258,7 @@ public class SAXParserMovie extends DefaultHandler {
         catch(Exception e){
             connection.close();
 
-            System.out.println(e);
+//            System.out.println(e);
 
         }
 
