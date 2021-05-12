@@ -189,7 +189,7 @@ public class SAXParserMovie extends DefaultHandler {
                     movieInsertPS.setString(1,movie.getTitle());
                     movieInsertPS.setString(2,String.valueOf(movie.getYear()));
                     movieInsertPS.setString(3,movie.getDirName());
-                    movieInsertPS.addBatch();
+//                    movieInsertPS.addBatch();
 
                 }
 
@@ -200,14 +200,14 @@ public class SAXParserMovie extends DefaultHandler {
 //            e.printStackTrace();
         }
 
-        try {
-            if(movieInsertPS!=null) movieInsertPS.close();
-            if(connection!=null) connection.close();
-        } catch(Exception e) {
-            connection.close();
-
-//            e.printStackTrace();
-        }
+//        try {
+//            if(movieInsertPS!=null) movieInsertPS.close();
+//            if(connection!=null) connection.close();
+//        } catch(Exception e) {
+//            connection.close();
+//
+////            e.printStackTrace();
+//        }
 //        try{
 //            if (movieInsertPS!=null) movieInsertPS.close();
 //            if (connection!=null) connection.close();
