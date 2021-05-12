@@ -213,7 +213,7 @@ public class SAXParserMovie extends DefaultHandler {
 //        } catch (Exception e){
 //            System.out.println(e);
 //        }
-        hashMovieCreate();
+//        hashMovieCreate();
 
     }
 
