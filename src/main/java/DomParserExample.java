@@ -114,7 +114,10 @@
 ////            System.out.println("1");
 //        }
 //        // create a new Employee with the value read from the xml nodes
-//        return new Actor(name, dob);
+//        Actor temp = new Actor();
+//        temp.setName(name);
+//        temp.setDob(dob);
+//        return temp;
 //    }
 //
 //    private Director parseDirectors(Element element){
@@ -157,7 +160,11 @@
 //
 //            }
 //        }
-//        Movie tempMovie = new Movie(dirID, dirName, movieID, title);
+//        Movie tempMovie = new Movie();
+//        tempMovie.setDir_id(dirID);
+//        tempMovie.setDir_name(dirName);
+//        tempMovie.setF(movieID);
+//        tempMovie.setTitle(title);
 //        tempMovie.setActors(actors);
 //        return tempMovie;
 //    }
@@ -204,7 +211,11 @@
 //                }
 //            }
 //
-//            Movie temp = new Movie(dirID, dirName, filmID, title);
+//            Movie temp = new Movie();
+//            temp.setDir_id(dirID);
+//            temp.setDir_name(dirName);
+//            temp.setF(filmID);
+//            temp.setTitle(title);
 //            temp.setYear(year);
 //            temp.setGenres(genres);
 //            movies.add(temp);
@@ -727,10 +738,10 @@
 //        DomParserExample domParse = new DomParserExample();
 //
 //        // call run example
-//        domParse.run("actors63.xml", "actor");
-////        domParse.run("casts124.xml", "dirfilms");
+////        domParse.run("actors63.xml", "actor");
+//        domParse.run("casts124.xml", "dirfilms");
 ////        domParse.run("mains243.xml", "directorfilms");
-//        domParse.insertStars();
+////        domParse.insertStars();
 ////        domParse.insertMovie();
 ////        domParse.insertGenre();
 ////        domParse.insertActorsInMovies();

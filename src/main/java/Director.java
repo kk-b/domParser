@@ -3,18 +3,29 @@ import java.util.List;
 
 public class Director {
 
-    private final String dirID;
+    private String dirID;
 
-    private final String dirName;
+    private  String dirName;
 
-    private final List<Movie> movies;
+    private List<Movie> movies;
 
 
-    public Director(String dirID, String dirName, List movies) {
+    public Director() {
+        this.dirID = "";
+        this.dirName = "";
+        this.movies = null;
+
+    }
+
+    public void setDirID(String dirID){
         this.dirID = dirID;
-        this.dirName = dirName;
-        this.movies = movies;
+    }
 
+    public void setDirName(String dirName){
+        this.dirName = dirName;
+    }
+    public void setdirectormovies(List<Movie> movies){
+        this.movies = movies;
     }
 
     public List<Movie> getMoviesMap(){
@@ -29,10 +40,15 @@ public class Director {
         return dirName;
     }
 
+
     public String getDirMovies(){
         String temp = "";
-        for (int i = 0; i < movies.size();i++){
-            temp += movies.get(i) + " ";
+
+        if (movies !=null) {
+            temp = "";
+            for (int i = 0; i < movies.size(); i++) {
+                temp += movies.get(i) + " ";
+            }
         }
         return temp;
     }
