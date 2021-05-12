@@ -335,6 +335,7 @@ public class DomParserExample {
         catch (Exception e){
             System.out.println(e);
         }
+        connection.close();
     }
 
     private void insertGenre() throws Exception {
@@ -385,6 +386,7 @@ public class DomParserExample {
             System.out.println(e);
         }
         hashGenreCreate();
+        connection.close();
 
     }
 
@@ -438,6 +440,8 @@ public class DomParserExample {
         catch(Exception e){
 
         }
+        connection.close();
+
     }
 
 
@@ -496,6 +500,7 @@ public class DomParserExample {
             System.out.println(e);
         }
         hashMovieCreate();
+        connection.close();
 
     }
 
@@ -537,6 +542,8 @@ public class DomParserExample {
         catch(Exception e){
 
         }
+        connection.close();
+
 
     }
 
@@ -574,6 +581,7 @@ public class DomParserExample {
         catch(Exception e){
 
         }
+        connection.close();
 
     }
 
@@ -630,6 +638,8 @@ public class DomParserExample {
             if (connection!=null) connection.close();
         } catch (Exception e){
         }
+        connection.close();
+
     }
 
     private void insertGenreInMovies() throws Exception {
@@ -694,6 +704,7 @@ public class DomParserExample {
             System.out.println(e);
         }
 
+        connection.close();
 
 
     }
