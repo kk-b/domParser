@@ -725,13 +725,13 @@ public class DomParserExample {
 
         // call run example
         domParse.run("actors63.xml", "actor");
-        domParse.run("casts124.xml", "dirfilms");
-        domParse.run("mains243.xml", "directorfilms");
+//        domParse.run("casts124.xml", "dirfilms");
+//        domParse.run("mains243.xml", "directorfilms");
         domParse.insertStars();
-        domParse.insertMovie();
-        domParse.insertGenre();
-        domParse.insertActorsInMovies();
-        domParse.insertGenreInMovies();
+//        domParse.insertMovie();
+//        domParse.insertGenre();
+//        domParse.insertActorsInMovies();
+//        domParse.insertGenreInMovies();
 
 
     }
