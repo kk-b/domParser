@@ -1,7 +1,5 @@
 
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +24,10 @@ public class SAXParserMovie extends DefaultHandler {
 
     private boolean inDirectorFilms;
     public HashMap<String,String> mysqlMovieData = new HashMap<>();
+    public HashMap<String,String> mysqlGenreData = new HashMap<>();
+    public HashMap<String,String> movieAbbreviations = new HashMap<>();
+
+
 
     //to maintain context
     private Movie tempMovie;
@@ -72,12 +74,12 @@ public class SAXParserMovie extends DefaultHandler {
      */
     private void printData() {
 
-//        System.out.println("No of Employees '" + myMovie.size() + "'.");
-//
-//        Iterator<Movie> it = myMovie.iterator();
-//        while (it.hasNext()) {
-//            System.out.println(it.next().toString());
-//        }
+        System.out.println("No of Employees '" + myMovie.size() + "'.");
+
+        Iterator<Movie> it = myMovie.iterator();
+        while (it.hasNext()) {
+            System.out.println(it.next().toString());
+        }
     }
 
     //Event Handlers
@@ -115,6 +117,7 @@ public class SAXParserMovie extends DefaultHandler {
             dirId =tempVal;
         }
         else if (qName.equalsIgnoreCase("fid")) {
+            System.out.println(tempVal);
             tempMovie.setF(tempVal);
         }
         else if (qName.equalsIgnoreCase("year")) {
@@ -148,6 +151,7 @@ public class SAXParserMovie extends DefaultHandler {
 
     private void insertMovie() throws Exception {
         hashMovieCreate();
+        System.out.println(myMovie.size());
 
         String loginUser = "mytestuser";
         String loginPasswd = "My6$Password";
@@ -157,7 +161,6 @@ public class SAXParserMovie extends DefaultHandler {
         Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 
 
-
         PreparedStatement movieInsertPS = null;
         String movieInsertSQL = null;
 
@@ -165,6 +168,7 @@ public class SAXParserMovie extends DefaultHandler {
 
         movieInsertSQL = "call add_moviexml(?,?,?);";
         try{
+            connection.setAutoCommit(false);
             movieInsertPS = connection.prepareStatement(movieInsertSQL);
             for (Movie movie: myMovie){
                 String movie_key = movie.getTitle()+","+movie.getYear()+","+movie.getDirName();
@@ -183,37 +187,37 @@ public class SAXParserMovie extends DefaultHandler {
                     System.out.println("inconsistency: movie year field (<year>) cannot be empty: "+movie.getYear());
                 }
                 else{
+                    System.out.println(movie.getTitle());
+                    System.out.println(movie.getYear());
+                    System.out.println(movie.getDirName());
 
                     movieInsertPS.setString(1,movie.getTitle());
                     movieInsertPS.setString(2,String.valueOf(movie.getYear()));
                     movieInsertPS.setString(3,movie.getDirName());
-//                    movieInsertPS.addBatch();
+                    movieInsertPS.addBatch();
 
                 }
 
             }
-            movieInsertPS.executeUpdate();
-            movieInsertPS.close();
+            iNoRows=movieInsertPS.executeBatch();
+            connection.commit();
         } catch (SQLException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
+        }finally{
+            try {
+                movieInsertPS.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
-//        try {
-//            if(movieInsertPS!=null) movieInsertPS.close();
-//            if(connection!=null) connection.close();
-//        } catch(Exception e) {
-//            connection.close();
-//
-////            e.printStackTrace();
-//        }
 //        try{
 //            if (movieInsertPS!=null) movieInsertPS.close();
 //            if (connection!=null) connection.close();
 //        } catch (Exception e){
 //            System.out.println(e);
 //        }
-//        hashMovieCreate();
-        connection.close();
+        hashMovieCreate();
 
     }
 
@@ -252,29 +256,198 @@ public class SAXParserMovie extends DefaultHandler {
             }
             movie_statement.close();
             rs_movie.close();
-            connection.close();
 
         }
         catch(Exception e){
-            connection.close();
-
-//            System.out.println(e);
+            System.out.println(e);
 
         }
-        connection.close();
 
 
+    }
+
+    private void insertGenre() throws Exception {
+        hashGenreCreate();
+
+        String loginUser = "mytestuser";
+        String loginPasswd = "My6$Password";
+        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+        PreparedStatement genreInsertPS = null;
+        String genreInsertSQL = null;
+        genreInsertSQL ="call add_genrexml(?);";
+        Movie m = null;
+        try{
+            connection.setAutoCommit(false);
+            genreInsertPS = connection.prepareStatement(genreInsertSQL);
+            for (Movie movie: myMovie){
+                m = movie;
+                if (movie.getGenres()!=null) {
+                    String[] genres = movie.getGenres().split(";");
+                    System.out.println("lol");
+                    System.out.println(genres.length);
+                    System.out.println("lol");
+                    for (int i = 0; i < genres.length; i++) {
+                        String currentGenre = genres[i].toLowerCase();
+                        if (currentGenre == "") {
+                            System.out.println("inconsistency: genre given in (<cat>) is null: " + currentGenre);
+                        } else if (!movieAbbreviations.containsKey(currentGenre)) {
+                            System.out.println("inconsistency: genre given (<cat>) is not part of DND movie category: " + currentGenre);
+                        } else if (mysqlGenreData.containsKey(movieAbbreviations.get(currentGenre))) {
+                            System.out.println("inconsistency: genre already exists: " + movieAbbreviations.get(currentGenre));
+                        } else {
+                            genreInsertPS.setString(1, movieAbbreviations.get(currentGenre));
+                            genreInsertPS.addBatch();
+                            mysqlGenreData.put(movieAbbreviations.get(currentGenre), "0");
+                        }
+                    }
+                }
+
+            }
+            genreInsertPS.executeBatch();
+            connection.commit();
+        } catch (Exception e){
+            System.out.println(m);
+            System.out.println(e);
+        }
+        try{
+            if (genreInsertPS!=null) genreInsertPS.close();
+            if (connection!=null) connection.close();
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        hashGenreCreate();
+
+    }
+
+
+    private void insertGenreInMovies() throws Exception {
+        hashMovieCreate();
+        hashGenreCreate();
+
+        String loginUser = "mytestuser";
+        String loginPasswd = "My6$Password";
+        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+        PreparedStatement genreInsertPS = null;
+        String genreInsertSQL = null;
+        genreInsertSQL = "call insert_genreInMoviesxml(?,?);";
+
+        try {
+            connection.setAutoCommit(false);
+            genreInsertPS = connection.prepareStatement(genreInsertSQL);
+            for (Movie movie : myMovie) {
+                String movie_key = movie.getTitle()+","+movie.getDirName();
+                movie_key = movie_key.toLowerCase();
+                System.out.println(movie_key);
+                if (mysqlMovieData2.containsKey(movie_key)) {
+
+                    String[] genres = movie.getGenres().split(";");
+                    for (int i = 0; i < genres.length; i++) {
+                        String currentGenre = genres[i].toLowerCase();
+
+                        if (currentGenre == ""){
+                            System.out.println("inconsistency: genre given in (<cat>) is null: " + currentGenre);
+                        }
+                        else if (!movieAbbreviations.containsKey(currentGenre)){
+                            System.out.println("inconsistency: genre given (<cat>) is not part of DND movie category: " + currentGenre);
+                        }
+                        else if (!mysqlGenreData.containsKey(movieAbbreviations.get(currentGenre))){
+                            System.out.println("inconsistency: does not exists: " + movieAbbreviations.get(currentGenre));
+                        }
+                        else{
+                            genreInsertPS.setString(1, mysqlGenreData.get(movieAbbreviations.get(currentGenre)));
+                            genreInsertPS.setString(2, mysqlMovieData2.get(movie_key));
+                            genreInsertPS.addBatch();
+                        }
+
+
+                    }
+                }
+                else{
+                    System.out.println("inconsistency: movie does not exist in database, unable to add: "+movie.getTitle());
+
+                }
+            }
+            genreInsertPS.executeBatch();
+            connection.commit();
+        } catch (Exception e){
+            System.out.println(e);
+        }
+        try{
+            if (genreInsertPS!=null) genreInsertPS.close();
+            if (connection!=null) connection.close();
+        } catch (Exception e){
+            System.out.println(e);
+        }
+
+
+
+    }
+
+    private void hashGenreCreate() throws Exception {
+        // Add abbreviations to hashmap for later usage
+        movieAbbreviations.put("susp", "Thriller");
+        movieAbbreviations.put("cnr", "Cops and Robbers");
+        movieAbbreviations.put("dram", "Drama");
+        movieAbbreviations.put("west", "Western");
+        movieAbbreviations.put("myst", "Mystery");
+        movieAbbreviations.put("s.f.", "Sci-Fi");
+        movieAbbreviations.put("advt", "Adventure");
+        movieAbbreviations.put("horr", "Horror");
+        movieAbbreviations.put("romt", "Romantic");
+        movieAbbreviations.put("comd", "Comedy");
+        movieAbbreviations.put("musc", "Musical");
+        movieAbbreviations.put("docu", "Documentary");
+        movieAbbreviations.put("porn", "Pornography, including soft");
+        movieAbbreviations.put("tv", "TV Show");
+        movieAbbreviations.put("tvs", "TV Series");
+        movieAbbreviations.put("tvmini", "TV Miniseries");
+        movieAbbreviations.put("biop","Biographical Picture");
+        movieAbbreviations.put("noir","Black");
+
+
+        String loginUser = "mytestuser";
+        String loginPasswd = "My6$Password";
+        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+        try{
+            String query = "select * from genres;";
+            // Declare our statement
+            PreparedStatement genre_statement = connection.prepareStatement(query);
+
+            ResultSet rs_genres = genre_statement.executeQuery();
+
+
+            while (rs_genres.next()){
+                String genre_id = rs_genres.getString("id");
+                String genre_name = rs_genres.getString("name");
+
+                mysqlGenreData.put(genre_name,genre_id);
+
+            }
+            genre_statement.close();
+            rs_genres.close();
+
+        }
+        catch(Exception e){
+
+        }
     }
 
 
 
     public static void main(String[] args) throws Exception {
-        PrintStream o = new PrintStream(new File("B.txt"));
-        PrintStream console = System.out;
-        System.setOut(o);
         SAXParserMovie spa = new SAXParserMovie();
         spa.runExample();
         spa.insertMovie();
+        spa.insertGenre();
+        spa.insertGenreInMovies();
     }
 
 }
