@@ -255,16 +255,13 @@ public class SAXParserMovie extends DefaultHandler {
             }
             movie_statement.close();
             rs_movie.close();
-            connection.close();
 
         }
         catch(Exception e){
-            connection.close();
 
 //            System.out.println(e);
 
         }
-        connection.close();
 
 
     }
