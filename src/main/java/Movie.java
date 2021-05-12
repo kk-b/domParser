@@ -4,15 +4,15 @@ import java.util.List;
 
 public class Movie {
 
-    private final String dir;
+    private String dir_name;
 
-    private final String is;
+    private String dir_id;
 
-    private final String f;
+    private String f;
 
     private List<String> actors = null;
 
-    private final String title;
+    private String title;
 
     private List<String> genres;
 
@@ -21,10 +21,23 @@ public class Movie {
 
 
 
-    public Movie(String dir, String is, String f, String title) {
-        this.dir = dir;
-        this.is = is;
+    public Movie() {
+        this.dir_name = "";
+        this.dir_id = "";
+        this.f = "";
+        this.title = "";
+    }
+
+    public void setDir_name(String dir){
+        this.dir_name = dir;
+    }
+    public void setDir_id(String is){
+        this.dir_id = is;
+    }
+    public void setF(String f){
         this.f = f;
+    }
+    public void setTitle(String title){
         this.title = title;
     }
 
@@ -40,11 +53,11 @@ public class Movie {
     }
 
     public String getDirID() {
-        return dir;
+        return dir_id;
     }
 
     public String getDirName() {
-        return is;
+        return dir_name;
     }
 
     public String getF() {
