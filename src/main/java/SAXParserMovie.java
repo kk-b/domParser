@@ -70,12 +70,12 @@ public class SAXParserMovie extends DefaultHandler {
      */
     private void printData() {
 
-//        System.out.println("No of Employees '" + myMovie.size() + "'.");
-//
-//        Iterator<Movie> it = myMovie.iterator();
-//        while (it.hasNext()) {
-//            System.out.println(it.next().toString());
-//        }
+        System.out.println("No of Employees '" + myMovie.size() + "'.");
+
+        Iterator<Movie> it = myMovie.iterator();
+        while (it.hasNext()) {
+            System.out.println(it.next().toString());
+        }
     }
 
     //Event Handlers
@@ -147,76 +147,76 @@ public class SAXParserMovie extends DefaultHandler {
 
     private void insertMovie() throws Exception {
         hashMovieCreate();
-//        System.out.println(myMovie.size());
+        System.out.println(myMovie.size());
+
+        String loginUser = "mytestuser";
+        String loginPasswd = "My6$Password";
+        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+
+
+
+        PreparedStatement movieInsertPS = null;
+        String movieInsertSQL = null;
+
+        int[] iNoRows = null;
+
+        movieInsertSQL = "call add_moviexml(?,?,?);";
+        try{
+            movieInsertPS = connection.prepareStatement(movieInsertSQL);
+            for (Movie movie: myMovie){
+                String movie_key = movie.getTitle()+","+movie.getYear()+","+movie.getDirName();
+                movie_key = movie_key.toLowerCase();
+                if (mysqlMovieData.containsKey(movie_key)){
+                    System.out.println("inconsistency: movie already exists title: "+movie.getTitle());
+                }
+                else if (movie.getTitle() == null){
+                    System.out.println("inconsistency: movie title (<t>) cannot be empty: "+movie.getTitle());
+                }
+                else if (movie.getDirName() == null){
+                    System.out.println("inconsistency: director field (<dirname>) cannot be empty: "+movie.getDirName());
+                }
+                else if (movie.getYear() == -1){
+                    System.out.println(movie.toString());
+                    System.out.println("inconsistency: movie year field (<year>) cannot be empty: "+movie.getYear());
+                }
+                else{
+                    System.out.println(movie.getTitle());
+                    System.out.println(movie.getYear());
+                    System.out.println(movie.getDirName());
+
+                    movieInsertPS.setString(1,movie.getTitle());
+                    movieInsertPS.setString(2,String.valueOf(movie.getYear()));
+                    movieInsertPS.setString(3,movie.getDirName());
+//                    movieInsertPS.addBatch();
+
+                }
+
+            }
+            movieInsertPS.executeUpdate();
+            movieInsertPS.close();
+        } catch (SQLException e) {
+//            e.printStackTrace();
+        }
+
+//        try {
+//            if(movieInsertPS!=null) movieInsertPS.close();
+//            if(connection!=null) connection.close();
+//        } catch(Exception e) {
+//            connection.close();
 //
-//        String loginUser = "mytestuser";
-//        String loginPasswd = "My6$Password";
-//        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
-//
-//        Class.forName("com.mysql.jdbc.Driver");
-//        Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
-//
-//
-//
-//        PreparedStatement movieInsertPS = null;
-//        String movieInsertSQL = null;
-//
-//        int[] iNoRows = null;
-//
-//        movieInsertSQL = "call add_moviexml(?,?,?);";
-//        try{
-//            movieInsertPS = connection.prepareStatement(movieInsertSQL);
-//            for (Movie movie: myMovie){
-//                String movie_key = movie.getTitle()+","+movie.getYear()+","+movie.getDirName();
-//                movie_key = movie_key.toLowerCase();
-//                if (mysqlMovieData.containsKey(movie_key)){
-//                    System.out.println("inconsistency: movie already exists title: "+movie.getTitle());
-//                }
-//                else if (movie.getTitle() == null){
-//                    System.out.println("inconsistency: movie title (<t>) cannot be empty: "+movie.getTitle());
-//                }
-//                else if (movie.getDirName() == null){
-//                    System.out.println("inconsistency: director field (<dirname>) cannot be empty: "+movie.getDirName());
-//                }
-//                else if (movie.getYear() == -1){
-//                    System.out.println(movie.toString());
-//                    System.out.println("inconsistency: movie year field (<year>) cannot be empty: "+movie.getYear());
-//                }
-//                else{
-//                    System.out.println(movie.getTitle());
-//                    System.out.println(movie.getYear());
-//                    System.out.println(movie.getDirName());
-//
-//                    movieInsertPS.setString(1,movie.getTitle());
-//                    movieInsertPS.setString(2,String.valueOf(movie.getYear()));
-//                    movieInsertPS.setString(3,movie.getDirName());
-////                    movieInsertPS.addBatch();
-//
-//                }
-//
-//            }
-//            movieInsertPS.executeUpdate();
-//            movieInsertPS.close();
-//        } catch (SQLException e) {
 ////            e.printStackTrace();
 //        }
-//
-////        try {
-////            if(movieInsertPS!=null) movieInsertPS.close();
-////            if(connection!=null) connection.close();
-////        } catch(Exception e) {
-////            connection.close();
-////
-//////            e.printStackTrace();
-////        }
-////        try{
-////            if (movieInsertPS!=null) movieInsertPS.close();
-////            if (connection!=null) connection.close();
-////        } catch (Exception e){
-////            System.out.println(e);
-////        }
-////        hashMovieCreate();
-//        connection.close();
+//        try{
+//            if (movieInsertPS!=null) movieInsertPS.close();
+//            if (connection!=null) connection.close();
+//        } catch (Exception e){
+//            System.out.println(e);
+//        }
+//        hashMovieCreate();
+        connection.close();
 
     }
 
@@ -255,13 +255,16 @@ public class SAXParserMovie extends DefaultHandler {
             }
             movie_statement.close();
             rs_movie.close();
+            connection.close();
 
         }
         catch(Exception e){
+            connection.close();
 
 //            System.out.println(e);
 
         }
+        connection.close();
 
 
     }
