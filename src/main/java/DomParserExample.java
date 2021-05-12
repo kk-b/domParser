@@ -385,8 +385,8 @@ public class DomParserExample {
         } catch (Exception e){
             System.out.println(e);
         }
-        hashGenreCreate();
         connection.close();
+        hashGenreCreate();
 
     }
 
@@ -435,12 +435,12 @@ public class DomParserExample {
             }
             genre_statement.close();
             rs_genres.close();
+            connection.close();
 
         }
         catch(Exception e){
 
         }
-        connection.close();
 
     }
 
@@ -499,8 +499,8 @@ public class DomParserExample {
         } catch (Exception e){
             System.out.println(e);
         }
-        hashMovieCreate();
         connection.close();
+        hashMovieCreate();
 
     }
 
@@ -538,11 +538,12 @@ public class DomParserExample {
             }
             movie_statement.close();
             rs_movie.close();
+            connection.close();
+
         }
         catch(Exception e){
 
         }
-        connection.close();
 
 
     }
@@ -577,11 +578,13 @@ public class DomParserExample {
             }
             actor_statement.close();
             rs_actor.close();
+            connection.close();
+
         }
         catch(Exception e){
 
         }
-        connection.close();
+//        connection.close();
 
     }
 
@@ -638,7 +641,7 @@ public class DomParserExample {
             if (connection!=null) connection.close();
         } catch (Exception e){
         }
-        connection.close();
+//        connection.close();
 
     }
 
