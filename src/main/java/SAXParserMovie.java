@@ -153,6 +153,7 @@ public class SAXParserMovie extends DefaultHandler {
         String loginPasswd = "My6$Password";
         String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
 
+        Class.forName("com.mysql.jdbc.Driver");
         Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 
 
