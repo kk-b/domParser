@@ -205,6 +205,8 @@ public class SAXParserMovie extends DefaultHandler {
             if(movieInsertPS!=null) movieInsertPS.close();
             if(connection!=null) connection.close();
         } catch(Exception e) {
+            connection.close();
+
 //            e.printStackTrace();
         }
 //        try{
@@ -214,6 +216,7 @@ public class SAXParserMovie extends DefaultHandler {
 //            System.out.println(e);
 //        }
 //        hashMovieCreate();
+        connection.close();
 
     }
 
@@ -261,6 +264,7 @@ public class SAXParserMovie extends DefaultHandler {
 //            System.out.println(e);
 
         }
+        connection.close();
 
 
     }
