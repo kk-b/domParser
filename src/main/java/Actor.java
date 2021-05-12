@@ -1,15 +1,23 @@
-
 public class Actor {
 
-    private final String name;
+    private String name;
 
-    private final int dob;
+    private int dob;
 
 
-    public Actor(String name, int dob) {
+    public Actor() {
+        this.name = "";
+        this.dob = -1;
+
+    }
+
+    public void setName(String name) {
         this.name = name;
-        this.dob = dob;
+    }
 
+
+    public void setDob(int dob) {
+        this.dob = dob;
     }
 
     public String getName() {
