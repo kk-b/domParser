@@ -164,7 +164,6 @@ public class SAXParserMovie extends DefaultHandler {
 
         movieInsertSQL = "call add_moviexml(?,?,?);";
         try{
-            connection.setAutoCommit(false);
             movieInsertPS = connection.prepareStatement(movieInsertSQL);
             for (Movie movie: myMovie){
                 String movie_key = movie.getTitle()+","+movie.getYear()+","+movie.getDirName();
@@ -195,8 +194,8 @@ public class SAXParserMovie extends DefaultHandler {
                 }
 
             }
-            iNoRows=movieInsertPS.executeBatch();
-            connection.commit();
+            movieInsertPS.executeUpdate();
+            movieInsertPS.close();
         } catch (SQLException e) {
 //            e.printStackTrace();
         }
