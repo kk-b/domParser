@@ -1,5 +1,7 @@
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,12 +76,12 @@ public class SAXParserMovie extends DefaultHandler {
      */
     private void printData() {
 
-        System.out.println("No of Employees '" + myMovie.size() + "'.");
-
-        Iterator<Movie> it = myMovie.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
+//        System.out.println("No of Employees '" + myMovie.size() + "'.");
+//
+//        Iterator<Movie> it = myMovie.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
     }
 
     //Event Handlers
@@ -187,9 +189,9 @@ public class SAXParserMovie extends DefaultHandler {
                     System.out.println("inconsistency: movie year field (<year>) cannot be empty: "+movie.getYear());
                 }
                 else{
-                    System.out.println(movie.getTitle());
-                    System.out.println(movie.getYear());
-                    System.out.println(movie.getDirName());
+//                    System.out.println(movie.getTitle());
+//                    System.out.println(movie.getYear());
+//                    System.out.println(movie.getDirName());
 
                     movieInsertPS.setString(1,movie.getTitle());
                     movieInsertPS.setString(2,String.valueOf(movie.getYear()));
@@ -259,7 +261,7 @@ public class SAXParserMovie extends DefaultHandler {
 
         }
         catch(Exception e){
-            System.out.println(e);
+//            System.out.println(e);
 
         }
 
@@ -285,9 +287,9 @@ public class SAXParserMovie extends DefaultHandler {
                 m = movie;
                 if (movie.getGenres()!=null) {
                     String[] genres = movie.getGenres().split(";");
-                    System.out.println("lol");
-                    System.out.println(genres.length);
-                    System.out.println("lol");
+//                    System.out.println("lol");
+//                    System.out.println(genres.length);
+//                    System.out.println("lol");
                     for (int i = 0; i < genres.length; i++) {
                         String currentGenre = genres[i].toLowerCase();
                         if (currentGenre == "") {
@@ -308,14 +310,14 @@ public class SAXParserMovie extends DefaultHandler {
             genreInsertPS.executeBatch();
             connection.commit();
         } catch (Exception e){
-            System.out.println(m);
-            System.out.println(e);
+//            System.out.println(m);
+//            System.out.println(e);
         }
         try{
             if (genreInsertPS!=null) genreInsertPS.close();
             if (connection!=null) connection.close();
         } catch (Exception e){
-            System.out.println(e);
+//            System.out.println(e);
         }
         hashGenreCreate();
 
@@ -342,7 +344,7 @@ public class SAXParserMovie extends DefaultHandler {
             for (Movie movie : myMovie) {
                 String movie_key = movie.getTitle()+","+movie.getDirName();
                 movie_key = movie_key.toLowerCase();
-                System.out.println(movie_key);
+//                System.out.println(movie_key);
                 if (mysqlMovieData2.containsKey(movie_key)) {
 
                     String[] genres = movie.getGenres().split(";");
@@ -375,13 +377,13 @@ public class SAXParserMovie extends DefaultHandler {
             genreInsertPS.executeBatch();
             connection.commit();
         } catch (Exception e){
-            System.out.println(e);
+//            System.out.println(e);
         }
         try{
             if (genreInsertPS!=null) genreInsertPS.close();
             if (connection!=null) connection.close();
         } catch (Exception e){
-            System.out.println(e);
+//            System.out.println(e);
         }
 
 
@@ -443,6 +445,9 @@ public class SAXParserMovie extends DefaultHandler {
 
 
     public static void main(String[] args) throws Exception {
+        PrintStream o = new PrintStream(new File("A.txt"));
+        PrintStream console = System.out;
+        System.setOut(o);
         SAXParserMovie spa = new SAXParserMovie();
         spa.runExample();
         spa.insertMovie();
