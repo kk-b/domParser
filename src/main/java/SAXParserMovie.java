@@ -70,12 +70,12 @@ public class SAXParserMovie extends DefaultHandler {
      */
     private void printData() {
 
-        System.out.println("No of Employees '" + myMovie.size() + "'.");
-
-        Iterator<Movie> it = myMovie.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next().toString());
-        }
+//        System.out.println("No of Employees '" + myMovie.size() + "'.");
+//
+//        Iterator<Movie> it = myMovie.iterator();
+//        while (it.hasNext()) {
+//            System.out.println(it.next().toString());
+//        }
     }
 
     //Event Handlers
