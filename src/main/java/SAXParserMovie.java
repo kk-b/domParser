@@ -155,12 +155,23 @@ public class SAXParserMovie extends DefaultHandler {
         hashMovieCreate();
         System.out.println(myMovie.size());
 
-        String loginUser = "mytestuser";
-        String loginPasswd = "My6$Password";
-        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+        Connection connection = null;
 
-        Class.forName("com.mysql.jdbc.Driver");
-        Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
+        String jdbcURL="jdbc:mysql://localhost:3306/moviedb";
+
+        try {
+            connection = DriverManager.getConnection(jdbcURL,"mytestuser", "My6$Password");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+//        String loginUser = "mytestuser";
+//        String loginPasswd = "My6$Password";
+//        String loginUrl = "jdbc:mysql://localhost:3306/moviedb";
+//
+//        Class.forName("com.mysql.jdbc.Driver");
+//        Connection connection = DriverManager.getConnection(loginUrl, loginUser, loginPasswd);
 
 
         PreparedStatement movieInsertPS = null;
